@@ -22,7 +22,7 @@ public class ObjectPool
 
     Dictionary<BulletType, Stack<IPoolable>> bulletPool = new Dictionary<BulletType, Stack<IPoolable>>();
 
-    Transform objectPoolParent;
+    public Transform objectPoolParent;
 
     private ObjectPool()
     {
@@ -30,15 +30,15 @@ public class ObjectPool
         objectPoolParent.name = this.ToString();
     }
 
-    public void Add(BulletType bulletType, IPoolable bulletStack)
+    public void Add(BulletType bulletType, IPoolable poolable)
     {
         if (!bulletPool.ContainsKey(bulletType))
             bulletPool.Add(bulletType, new Stack<IPoolable>());
 
-        bulletPool[bulletType].Push(bulletStack);
-        bulletStack.GetBulletGameObject.transform.SetParent(objectPoolParent);
-        bulletStack.GetBulletGameObject.SetActive(false);
-        bulletStack.Pool();
+        bulletPool[bulletType].Push(poolable);
+        poolable.GetBulletGameObject.transform.SetParent(objectPoolParent);
+        poolable.GetBulletGameObject.SetActive(false);
+        poolable.Pool();
     }
 
     public IPoolable Retrieve(BulletType bulletType)
@@ -46,7 +46,6 @@ public class ObjectPool
         if (bulletPool.ContainsKey(bulletType) && bulletPool[bulletType].Count > 0)
         {
             IPoolable bulletToRet = bulletPool[bulletType].Pop();
-            bulletToRet.GetBulletGameObject.transform.SetParent(BulletManager.Instance.bulletParent);
             bulletToRet.GetBulletGameObject.SetActive(true);
             bulletToRet.Depool();
             return bulletToRet;

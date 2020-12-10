@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class BulletManager
 {
@@ -46,11 +45,12 @@ public class BulletManager
 
     public void CreateRandomBullet(Transform gunPoint)
     {
+
         Bullet bullet = BulletFactory.Instance.CreateRandomBullet(gunPoint.position);
         bullet.SetMoveDirection(gunPoint.up);
+        bullet.transform.SetParent(bulletParent);
 
-        BulletType type = bullet.GetBulletType;
-        AddBulletInDictionary(type, bullet);
+        AddBulletInDictionary(bullet.GetBulletType, bullet);
     }
 
     void AddBulletInDictionary(BulletType type, Bullet bullet)

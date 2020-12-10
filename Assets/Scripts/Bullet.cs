@@ -10,6 +10,8 @@ public class Bullet : MonoBehaviour, IPoolable
     protected float magnitude;
     protected BulletType type;
 
+    private bool isUsed = true;
+
     public GameObject GetBulletGameObject => gameObject;
 
     public BulletType GetBulletType => type;
@@ -31,18 +33,18 @@ public class Bullet : MonoBehaviour, IPoolable
             transform.position += moveDirection * speed * Time.deltaTime;
             magnitude = transform.position.sqrMagnitude;
 
-            if (magnitude > 20)
+            if (magnitude > 500 && isUsed)
                 ObjectPool.Instance.Add(type, this);
         }
     }
 
     public void Pool()
     {
-        gameObject.SetActive(false);
+        isUsed = false;
     }
 
     public void Depool()
     {
-        gameObject.SetActive(true);
+        isUsed = true;
     }
 }
